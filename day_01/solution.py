@@ -5,6 +5,10 @@ DEFAULT_INPUT = Path("input.txt")
 
 
 def solve_part1(rotations: list):
+    """
+    The actual password is the number of times the dial is left pointing at 0
+    after any rotation in the sequence.
+    """
     position = 50
     zero_cnt = 0
 
@@ -32,6 +36,12 @@ def solve_part1(rotations: list):
 
 
 def solve_part2(rotations: list):
+    """
+    You remember from the training seminar that "method 0x434C49434B" means
+    you're actually supposed to count the number of times any click causes
+    the dial to point at 0, regardless of whether it happens during a rotation
+    or at the end of one.
+    """
     position = 50
     zero_cnt = 0
 
