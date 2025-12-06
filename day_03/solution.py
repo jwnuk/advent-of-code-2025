@@ -26,7 +26,35 @@ def solve_part1(banks: list):
 
 
 def solve_part2(banks: list):
-    pass
+    """
+    Now, you need to make the largest joltage by turning on exactly twelve batteries
+    within each bank.
+
+    The joltage output for the bank is still the number formed by the digits
+    of the batteries you've turned on; the only difference is that now there will be
+    12 digits in each bank's joltage output instead of two.
+    """
+    jolts = []
+
+    for bank in banks:
+        jolts_b = ""
+        next_start = -1
+        n = 1
+        for i in range(11, 0, -1):
+            current_start = next_start + 1
+            bank_part = bank[current_start:-i]
+            # print(f"Searching in {bank_part}, start: {current_start}, stop: {-i}")
+            max_digit = str(max([int(char) for char in bank_part]))
+            next_start = current_start + bank_part.find(max_digit)
+            # print(f"iteration: {n}, max: {max_digit}, index: {next_start}\n")
+            n += 1
+            jolts_b += max_digit
+
+        last_digit = str(max([int(char) for char in bank[next_start + 1 :]]))
+        jolts_b += last_digit
+        jolts.append(int(jolts_b))
+
+    return sum(jolts)
 
 
 def main():
