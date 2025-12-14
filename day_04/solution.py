@@ -37,7 +37,41 @@ def solve_part1(grid: list):
 
 
 def solve_part2(grid: list):
-    pass
+    """
+    Once a roll of paper can be accessed by a forklift, it can be removed. Once a roll
+    of paper is removed, the forklifts might be able to access more rolls of paper,
+    which they might also be able to remove. How many total rolls of paper could the
+    Elves remove if they keep repeating this process?
+    Start with your original diagram.
+    """
+    accessible_cnt = 1
+    grid = [[char == "@" for char in line] for line in grid]
+    arr = np.array(grid, dtype="bool")
+    arr_pad = np.pad(arr, 1, constant_values=False)
+    arr_pad_result = arr_pad.copy()
+    total_rolls_accessed = 0
+
+    while accessible_cnt > 0:
+        accessible_cnt = 0
+
+        for i in range(1, arr.shape[0] + 1):
+            for j in range(1, arr.shape[1] + 1):
+                if_roll = arr_pad[i, j]
+
+                if not if_roll:
+                    continue
+                checked_arr = arr_pad[i - 1 : i + 2, j - 1 : j + 2]
+
+                if checked_arr.sum() > 4:
+                    continue
+
+                accessible_cnt += 1
+                arr_pad_result[i, j] = False
+
+        total_rolls_accessed += accessible_cnt
+        arr_pad = arr_pad_result.copy()
+
+    return total_rolls_accessed
 
 
 def main():
