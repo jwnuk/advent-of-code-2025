@@ -15,18 +15,22 @@ def solve_part1(ingredient_ids: list, ingredient_list: list):
     Process the database file from the new inventory management system.
     How many of the available ingredient IDs are fresh?
     """
-    fresh_ids_arr = np.array([])
+    fresh_ingredients = 0
 
-    for ids_range in ingredient_ids:
-        start, stop = ids_range.split("-")
-        range_arr = np.arange(int(start), int(stop) + 1)
-        fresh_ids_arr = np.unique(np.concat([fresh_ids_arr, range_arr]))
+    ranges = [
+        [int(ids_range.split("-")[0]), int(ids_range.split("-")[1])]
+        for ids_range in ingredient_ids
+    ]
 
-    ingredient_list = [int(ingredient) for ingredient in ingredient_list]
-    ingredient_arr = np.array(ingredient_list)
-    fresh_ingredients = ingredient_arr[np.isin(ingredient_arr, fresh_ids_arr)]
+    for ingredient_id in ingredient_list:
+        ingredient_id_int = int(ingredient_id)
+        if any(
+            ingredient_id_int >= id_range[0] and ingredient_id_int <= id_range[1]
+            for id_range in ranges
+        ):
+            fresh_ingredients += 1
 
-    return fresh_ingredients.shape[0]
+    return fresh_ingredients
 
 
 def solve_part2():
