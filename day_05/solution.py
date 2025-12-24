@@ -1,5 +1,4 @@
 import argparse
-import numpy as np
 from pathlib import Path
 
 DEFAULT_PATH = "input.txt"
@@ -33,8 +32,29 @@ def solve_part1(ingredient_ids: list, ingredient_list: list):
     return fresh_ingredients
 
 
-def solve_part2():
-    pass
+def solve_part2(ingredient_ids: list):
+    """
+    The Elves would like to know all of the IDs that the fresh ingredient ID ranges
+    consider to be fresh. An ingredient ID is still considered fresh if it is in any
+    range.
+    Process the database file again. How many ingredient IDs are considered to be fresh
+    according to the fresh ingredient ID ranges?
+    """
+    total_ids = 0
+
+    id_ranges = [[int(i.split("-")[0]), int(i.split("-")[1])] for i in ingredient_ids]
+    id_ranges.sort()
+    current_min, current_max = id_ranges[0]
+
+    for range_min, range_max in id_ranges[1:]:
+        if range_min <= current_max + 1:
+            current_max = max(current_max, range_max)
+        else:
+            total_ids += current_max - current_min + 1
+            current_min, current_max = range_min, range_max
+    total_ids += current_max - current_min + 1
+
+    return total_ids
 
 
 def main():
@@ -44,7 +64,7 @@ def main():
     ingredient_ids, ingredient_list = [text.splitlines() for text in raw.split("\n\n")]
 
     print("Part 1:", solve_part1(ingredient_ids, ingredient_list))
-    # print("Part 2:", solve_part2(ingredient_ids, ingredient_list))
+    print("Part 2:", solve_part2(ingredient_ids))
 
 
 if __name__ == "__main__":
